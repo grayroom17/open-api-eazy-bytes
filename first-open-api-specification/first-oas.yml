@@ -61,8 +61,8 @@ paths:
                       type: string
   /categories/{categoryId}:
     get:
-      summary: Get category by id
-      description: Returns category by id
+      summary: Return category details
+      description: Returns the category details from EazyShop
       parameters:
         - name: categoryId
           in: path
@@ -73,7 +73,7 @@ paths:
             maximum: 1000
       responses:
         '200':
-          description: One category
+          description: Return category details
           content:
             aplication/json:
               schema:
@@ -83,3 +83,59 @@ paths:
                     type: integer
                   name:
                     type: string
+  /products:
+    get:
+      summary: List all products
+      description: Returns the list of products supported by EazyShop
+      parameters:
+        - in: query
+          name: categoryId
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    productId:
+                      type: integer
+                    name:
+                      type: string
+                    price:
+                      type: integer
+                    categoryName:
+                      type: string
+                    quantity:
+                      type: integer
+  /products/{productId}:
+    get:
+      summary: Returns product details
+      description: Returns the product details from EazyShop
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Return product details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  productId:
+                    type: integer
+                  name:
+                    type: string
+                  price:
+                    type: integer
+                  categoryName:
+                    type: string
+                  quantity:
+                    type: integer
