@@ -40,9 +40,18 @@ servers:
           - "443"
       version:
         default: v1
+tags:
+  - name: Categories
+    description: Categories related operations
+  - name: Products
+    description: Products-related operations
+  - name: Orders
+    description: Orders-ralated operations
 paths:
   /categories:
     get:
+      tags:
+        - Categories
       summary: List all categories
       description: Returns the list of categories supported by EazyShop
       parameters:
@@ -95,6 +104,8 @@ paths:
                       name: Televisions
   /categories/{categoryId}:
     get:
+      tags:
+        - Categories
       summary: Return category details
       description: Returns the category details from EazyShop
       parameters:
@@ -119,6 +130,8 @@ paths:
                     type: string
   /products:
     get:
+      tags:
+        - Products
       summary: List all products
       description: Returns the list of products supported by EazyShop
       parameters:
@@ -171,9 +184,10 @@ paths:
                       price: 800
                       categoryName: Mobiles
                       quantity: 31
-
   /products/{productId}:
     get:
+      tags:
+        - Products
       summary: Returns product details
       description: Returns the product details from EazyShop
       parameters:
@@ -209,6 +223,8 @@ paths:
                       the stock value is 0*</u>
   /orders:
     post:
+      tags:
+        - Orders
       summary: Create order
       description: Post order details to EazyShop for processing and shipping
       requestBody:
@@ -259,6 +275,8 @@ paths:
                   orderId:
                     type: integer
     put:
+      tags:
+        - Orders
       summary: Update order
       description: Update order details to EazyShop for processing and shipping
       requestBody:
@@ -304,6 +322,8 @@ paths:
         '200':
           description: Order details updated successfully
     delete:
+      tags:
+        - Orders
       summary: Delete order
       description: Delete order details from EazyShop
       parameters:
@@ -316,6 +336,8 @@ paths:
         '204':
           description: Order successfully cancelled
     get:
+      tags:
+        - Orders
       summary: Get order details
       description: Get order details from EazyShop
       parameters:
