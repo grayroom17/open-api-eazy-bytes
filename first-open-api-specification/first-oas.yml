@@ -327,11 +327,7 @@ paths:
       summary: Delete order
       description: Delete order details from EazyShop
       parameters:
-        - in: query
-          name: orderId
-          required: true
-          schema:
-            type: integer
+        - $ref: "#/components/parameters/orderIdQueryParam"
       responses:
         '204':
           description: Order successfully cancelled
@@ -341,11 +337,7 @@ paths:
       summary: Get order details
       description: Get order details from EazyShop
       parameters:
-        - in: query
-          name: orderId
-          required: true
-          schema:
-            type: integer
+        - $ref: "#/components/parameters/orderIdQueryParam"
       responses:
         '200':
           description: Fetch order details successfully
@@ -387,3 +379,11 @@ paths:
                         type: string
                       zipcode:
                         type: string
+components:
+  parameters:
+    orderIdQueryParam:
+      name: orderId
+      in: query
+      required: true
+      schema:
+        type: integer
