@@ -293,6 +293,9 @@ components:
           type: string
         zipcode:
           type: string
+        isOfficeAddress:
+          type: boolean
+          default: false
       required: [addressLine, city, state, zipcode]
     Product:
       type: object
@@ -308,6 +311,7 @@ components:
           maximum: 1500
         categoryName:
           type: string
+          nullable: true
         releaseDate:
           type: string
           format: date
@@ -330,4 +334,35 @@ components:
   responses:
     InternalServerError:
       description: |
-        An error occurred
+        An error occurred 
+          
+                      
+                      
+    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
