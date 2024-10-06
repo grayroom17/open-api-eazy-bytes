@@ -148,17 +148,17 @@ paths:
                   value:
                     - productId: 101
                       name: Apple Iphone 15 Pro
-                      price: 800
+                      price: 800.99
                       categoryName: Mobiles
                       quantity: 55
                     - productId: 102
                       name: Google Pixel 9 Pro
-                      price: 1000
+                      price: 1000.99
                       categoryName: Mobiles
                       quantity: 76
                     - productId: 103
                       name: Xiaomi 14
-                      price: 800
+                      price: 800.99
                       categoryName: Mobiles
                       quantity: 31
         '500':
@@ -293,7 +293,7 @@ components:
           type: string
         zipcode:
           type: string
-      required: [addressLine, city, staty, zipcode]
+      required: [addressLine, city, state, zipcode]
     Product:
       type: object
       properties:
@@ -301,6 +301,11 @@ components:
           type: integer
         name:
           type: string
+        price:
+          type: integer
+          format: float
+          minimum: 100
+          maximum: 1500
         categoryName:
           type: string
         quantity:
