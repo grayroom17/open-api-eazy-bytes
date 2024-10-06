@@ -315,6 +315,7 @@ components:
         releaseDate:
           type: string
           format: date
+          readOnly: true
         quantity:
           type: integer
           description: |
@@ -334,35 +335,4 @@ components:
   responses:
     InternalServerError:
       description: |
-        An error occurred 
-          
-                      
-                      
-    
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+        An error occurred
