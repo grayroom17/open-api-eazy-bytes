@@ -308,6 +308,9 @@ components:
           maximum: 1500
         categoryName:
           type: string
+        releaseDate:
+          type: string
+          format: date
         quantity:
           type: integer
           description: |
