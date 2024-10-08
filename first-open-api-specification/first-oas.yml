@@ -28,6 +28,9 @@ info:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
   version: 0.0.1
+externalDocs:
+  description: External Documentation
+  url: https://examle.com
 servers:
   - url: https://development.eazyshop-server.com/v1
     description: Development server
@@ -57,6 +60,9 @@ tags:
 paths:
   /categories:
     get:
+      externalDocs:
+        description: External Documentation
+        url: https://examle.com
       tags:
         - Categories
       summary: List all categories
