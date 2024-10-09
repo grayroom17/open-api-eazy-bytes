@@ -68,6 +68,8 @@ security:
 paths:
   /categories:
     get:
+      security:
+        - BasicAuth: []
       externalDocs:
         description: External Documentation
         url: https://examle.com
@@ -123,6 +125,7 @@ paths:
           $ref: "#/components/responses/InternalServerError"
   /categories/{categoryId}:
     get:
+      security: []
       tags:
         - Categories
       summary: Return category details
