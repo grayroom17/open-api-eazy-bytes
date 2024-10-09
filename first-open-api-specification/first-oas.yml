@@ -61,6 +61,10 @@ security:
   - BasicAuth: []
   - BearerAuth: []
   - ApiKeyAuth: []
+  - oAuth2AuthCode:
+      - read
+      - write
+      - admin
 paths:
   /categories:
     get:
@@ -514,3 +518,13 @@ components:
       type: apiKey
       in: header
       name: X-API-KEY
+    oAuth2AuthCode:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://example.com/oauth/authority
+          tokenUrl: https://example.com/api/oauth.access
+          scopes:
+            read: Read only access
+            write: Read and writer access
+            admin: Admin access
