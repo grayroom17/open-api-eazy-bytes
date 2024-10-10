@@ -1,0 +1,533 @@
+openapi: 3.0.3
+info:
+  title: EazyShop Products APIs Definition
+  description: |
+    # About Us
+    ***EazyShop*** is a open market product selling company. Any website can list our products by  using our ___APIs___. Shipping & other logistics will be taken care by us. You will get an `Affiliate commision` for selling our products.
+    # Categories supported
+      - Mobiles
+        - Apple
+        - Samsung
+        - OnePlus
+      - Laptops
+      - Televisions
+      - Headphones
+  termsOfService: https://eazyshop.com/terms
+  x-custom-info:
+    comment: Some comments
+    developers:
+      - name: John Doe
+        email: john@doe.com
+      - name: Jane Doe
+        email: jane@doe.com
+  contact:
+    name: API Support
+    url: https://eazyshop.com/support
+    email: support@eazyshop.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: 0.0.1
+externalDocs:
+  description: External Documentation
+  url: https://examle.com
+servers:
+  - url: https://development.eazyshop-server.com/v1
+    description: Development server
+  - url: https://staging.eazyshop-server.com/v1
+    description: Staging server
+  - url: https://api.eazyshop-server.com/v1
+    description: Production server
+  - url: https://{username}.server.com:{port}/{version}
+    variables:
+      username:
+        default: demo
+        description: This value is assigned by the service provider
+      port:
+        default: "433"
+        enum:
+          - "8443"
+          - "443"
+      version:
+        default: v1
+tags:
+  - name: Categories
+    description: Categories related operations
+  - name: Products
+    description: Products-related operations
+  - name: Orders
+    description: Orders-ralated operations
+security:
+  - BasicAuth: []
+  - BearerAuth: []
+  - ApiKeyAuth: []
+  - oAuth2AuthCode:
+      - read
+      - write
+      - admin
+paths:
+  /categories:
+    get:
+      security:
+        - BasicAuth: []
+      externalDocs:
+        description: External Documentation
+        url: https://examle.com
+      tags:
+        - Categories
+      summary: List all categories
+      description: Returns the list of categories supported by EazyShop
+      operationId: getCategories
+      parameters:
+        - name: categoryId
+          in: query
+          schema:
+            type: integer
+            minimum: 100
+            maximum: 1000
+          examples:
+            mobiles:
+              summary: Use this example for mobile
+              value: 101
+            laptops:
+              value: 102
+            headphones:
+              value: 103
+            televisions:
+              value: 104
+      responses:
+        '200':
+          description: A list of categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+              examples:
+                all-catigories-data:
+                  summary: Categories example data
+                  value:
+                    - categoryId: 101
+                      name: Mobiles
+                    - categoryId: 102
+                      name: Laptops
+                    - categoryId: 103
+                      name: Headphones
+                    - categoryId: 104
+                      name: Televisions
+                single-category-data:
+                  summary: Single category example data
+                  value:
+                    - categoryId: 101
+                      name: Televisions
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+  /categories/{categoryId}:
+    get:
+      security: []
+      tags:
+        - Categories
+      summary: Return category details
+      description: Returns the category details from EazyShop
+      operationId: getCategoryDetails
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 100
+            maximum: 1000
+      responses:
+        '200':
+          description: Return category details
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+  /products:
+    get:
+      tags:
+        - Products
+      summary: List all products
+      description: Returns the list of products supported by EazyShop
+      operationId: getProducts
+      parameters:
+        - in: query
+          name: categoryId
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+              examples:
+                products-example:
+                  summary: Products example data
+                  value:
+                    - productId: 101
+                      name: Apple Iphone 15 Pro
+                      price: 800.99
+                      categoryName: Mobiles
+                      quantity: 55
+                    - productId: 102
+                      name: Google Pixel 9 Pro
+                      price: 1000.99
+                      categoryName: Mobiles
+                      quantity: 76
+                    - productId: 103
+                      name: Xiaomi 14
+                      price: 800.99
+                      categoryName: Mobiles
+                      quantity: 31
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+  /products/{productId}:
+    get:
+      tags:
+        - Products
+      summary: Returns product details
+      description: Returns the product details from EazyShop
+      operationId: getProductDetails
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Return product details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+  /orders:
+    post:
+      tags:
+        - Orders
+      summary: Create order
+      description: Post order details to EazyShop for processing and shipping
+      operationId: saveOrderDetails
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                products:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Product"
+                address:
+                  $ref: "#/components/schemas/Address"
+      responses:
+        '201':
+          description: Order created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orderId:
+                    type: integer
+          links:
+            GetOrderByOrderId:
+              $ref: "#/components/links/GetOrderByOrderId"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+    put:
+      tags:
+        - Orders
+      summary: Update order
+      description: Update order details to EazyShop for processing and shipping
+      operationId: updateOrderDetails
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderId:
+                  type: integer
+                products:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Product"
+                address:
+                  $ref: "#/components/schemas/Address"
+      responses:
+        '200':
+          description: Order details updated successfully
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      tags:
+        - Orders
+      summary: Delete order
+      description: Delete order details from EazyShop
+      operationId: deleteOrderDetails
+      parameters:
+        - $ref: "#/components/parameters/orderIdQueryParam"
+      responses:
+        '204':
+          description: Order successfully cancelled
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+    get:
+      tags:
+        - Orders
+      summary: Get order details
+      description: Get order details from EazyShop
+      operationId: getOrderDetails
+      parameters:
+        - $ref: "#/components/parameters/orderIdQueryParam"
+      responses:
+        '200':
+          description: Fetch order details successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  products:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Product"
+                  address:
+                    $ref: "#/components/schemas/Address"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+  /orders/{orderId}:
+    get:
+      tags:
+        - Orders
+      summary: Get Order Details
+      description: Get order details from EazyShop
+      operationId: getOrderDetailsUsingPathParam
+      deprecated: true
+      parameters:
+        - $ref: "#/components/parameters/orderIdPathParam"
+      responses:
+        '200':
+          description: Fetch Order details successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orderId:
+                    type: integer
+                  products:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Product"
+                  address:
+                    $ref: "#/components/schemas/Address"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+  /oneOfOrder:
+    post:
+      tags:
+        - Orders
+      summary: Insert OneOf the Order Details
+      description: Insert OneOf the Order Details into Eazyshop
+      operationId: demoOfOneOf
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                products:
+                  type: object
+                  oneOf:
+                    - $ref: '#/components/schemas/Mobile'
+                    - $ref: '#/components/schemas/Laptop'
+                address:
+                  $ref: '#/components/schemas/Address'
+              required:
+                - products
+                - address
+      responses:
+        '200':
+          description: Order placed successfully
+  /anyOfOrder:
+    get:
+      tags:
+        - Orders
+      summary: Get Order Details
+      description: Get Order Details based on Order ID
+      operationId: demoOfAnyOf
+      parameters:
+        - $ref: "#/components/parameters/orderIdQueryParam"
+        - name: fetchType
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - summary
+              - details
+          description: >
+            Fetch Type:
+             * `summary` - Will provide Order Summary
+             * `details` - Will provide Order Summary & Order Address
+      responses:
+        '200':
+          description: Return product details
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/OrderSummary'
+                  - $ref: '#/components/schemas/OrderAddress'
+components:
+  parameters:
+    orderIdQueryParam:
+      name: orderId
+      in: query
+      required: true
+      schema:
+        type: integer
+    orderIdPathParam:
+      name: orderId
+      in: path
+      required: true
+      schema:
+        type: integer
+  schemas:
+    Address:
+      type: object
+      properties:
+        addressLine:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+          enum:
+            - California
+            - Texas
+            - Washinghton
+            - Oregon
+            - NewYork
+        zipcode:
+          type: string
+        isOfficeAddress:
+          type: boolean
+          default: false
+      required: [addressLine, city, state, zipcode]
+    Product:
+      type: object
+      properties:
+        productId:
+          type: integer
+        name:
+          type: string
+        price:
+          type: integer
+          format: float
+          minimum: 100
+          maximum: 1500
+        categoryName:
+          type: string
+          nullable: true
+        releaseDate:
+          type: string
+          format: date
+          readOnly: true
+        quantity:
+          type: integer
+          description: |
+            ***Quantity*** represents `stock` value when this field
+            is being sent by EazyShop.Where as in the scenarios of
+            consumer sending this field, it represents `number of 
+            product items` inside the order. Consumers are expected 
+            to handle the scenario of stopping the end user <u>*when
+            the stock value is 0*</u>
+    Category:
+      type: object
+      properties:
+        categoryId:
+          type: integer
+        name:
+          type: string
+    Mobile:
+      allOf:
+        - $ref: "#/components/schemas/Product"
+        - type: object
+          properties:
+            networkType:
+              type: string
+              enum:
+                - 4G
+                - 5G
+          required: [networkType]
+    Laptop:
+      allOf:
+        - $ref: "#/components/schemas/Product"
+        - type: object
+          properties:
+            ram:
+              type: string
+              enum:
+                - 8 GB
+                - 16 GB
+                - 32 GB
+          required: [ram]
+    OrderSummary:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+    OrderAddress:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/Address'
+  responses:
+    InternalServerError:
+      description: |
+        An error occurred
+  links:
+    GetOrderByOrderId:
+      description: >
+        The `orderId` value returned in the response can be used as input parameter in `GET /orders`.
+      operationId: getProductDetails
+      parameters:
+        orderId: '$response.body#/orderId'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    oAuth2AuthCode:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://example.com/oauth/authority
+          tokenUrl: https://example.com/api/oauth.access
+          scopes:
+            read: Read only access
+            write: Read and writer access
+            admin: Admin access
